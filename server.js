@@ -147,12 +147,17 @@ app.post('/api/login', (req, res) => {
 
 // Middleware de autenticação simples
 const authMiddleware = (req, res, next) => {
+  // Para indicações públicas, não precisa auth
+  if (req.body && req.body.indicador_codigo) {
+    return next();
+  }
+  
+  // Para admin, verifica token (simplificado por enquanto)
   const token = req.headers.authorization;
-  // Em produção, você deve validar o token properly
   if (token) {
     next();
   } else {
-    res.status(401).json({ error: 'Não autorizado' });
+    res.status(401).json({ error: 'Token não fornecido' });
   }
 };
 
