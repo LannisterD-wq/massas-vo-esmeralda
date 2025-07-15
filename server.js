@@ -359,4 +359,50 @@ app.use('/api/*', (req, res, next) => {
   next();
 });
 
+
+app.get('/sw.js', (req, res) => {
+  res.type('application/javascript');
+  res.send(`
+const CACHE_NAME = 'massas-ve-v1';
+const urlsToCache = [
+  '/',
+  '/admin',
+  '/login'
+];
+
+self.addEventListener('install', event => {
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then(cache => cache.addAll(urlsToCache))
+  );
+});
+
+app.get('/manifest.json', (req, res) => {
+  res.json({
+    "short_name": "Massas VE",
+    "name": "Massas Vó Esmeralda",
+    "icons": [
+      {
+        "src": "/logo.png",
+        "type": "image/png",
+        "sizes": "192x192"
+      }
+    ],
+    "start_url": "/admin",
+    "background_color": "#8B5A3C",
+    "display": "standalone",
+    "theme_color": "#8B5A3C"
+  });
+});
+
+self.addEventListener('fetch', event => {
+  event.respondWith(
+    caches.match(event.request)
+      .then(response => {
+        return response || fetch(event.request);
+      })
+  );
+});`);
+});
+
 ;
