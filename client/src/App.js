@@ -4,15 +4,17 @@ import Admin from './pages/Admin';
 import IndicacaoForm from './pages/IndicacaoForm';
 import Login from './pages/Login';
 import './App.css';
+import axios from 'axios';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+    useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
       setIsAuthenticated(true);
+      axios.defaults.headers.common['Authorization'] = token;
     }
     setLoading(false);
   }, []);

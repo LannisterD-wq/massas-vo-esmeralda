@@ -2,6 +2,12 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import API_URL from '../config';
 
+
+// Configurar token padrão no axios
+if (localStorage.getItem('token')) {
+  axios.defaults.headers.common['Authorization'] = localStorage.getItem('token');
+}
+
 function Admin() {
   const [activeTab, setActiveTab] = useState('pessoas');
   const [pessoas, setPessoas] = useState([]);
@@ -156,11 +162,18 @@ function Admin() {
     .filter(p => p.total_indicacoes > 0)
     .sort((a, b) => b.total_indicacoes - a.total_indicacoes);
 
-  return (
+  
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    window.location.href = '/login';
+  };
+
+return (
     <div>
       <div className="header">
         <img src="/logo.png" alt="Massas Vó Esmeralda" className="logo" />
         <h1>Massas Vó Esmeralda - Administração</h1>
+        <button onClick={handleLogout} className="logout-btn">Sair</button>
       </div>
 
       <div className="container">
