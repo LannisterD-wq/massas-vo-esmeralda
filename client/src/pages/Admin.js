@@ -67,10 +67,15 @@ function Admin() {
     }
   };
 
-  const criarPessoa = async (e) => {
+    const criarPessoa = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`${API_URL}/api/pessoas`, novaPessoa);
+      const token = localStorage.getItem('token');
+      const response = await axios.post(`${API_URL}/api/pessoas`, novaPessoa, {
+        headers: {
+          'Authorization': token
+        }
+      });
       alert(`Pessoa criada! Link: ${response.data.link}`);
       setNovaPessoa({ nome: '', telefone: '', endereco: '' });
       fetchPessoas();
@@ -94,9 +99,14 @@ function Admin() {
     setDadosEdicao({});
   };
 
-  const salvarEdicao = async (id) => {
+    const salvarEdicao = async (id) => {
     try {
-      await axios.put(`${API_URL}/api/pessoas/${id}`, dadosEdicao);
+      const token = localStorage.getItem('token');
+      await axios.put(`${API_URL}/api/pessoas/${id}`, dadosEdicao, {
+        headers: {
+          'Authorization': token
+        }
+      });
       fetchPessoas();
       setEditando(null);
       setDadosEdicao({});
@@ -106,9 +116,14 @@ function Admin() {
     }
   };
 
-  const atualizarStatus = async (id, campo, valor) => {
+    const atualizarStatus = async (id, campo, valor) => {
     try {
-      await axios.patch(`${API_URL}/api/pessoas/${id}`, { [campo]: valor });
+      const token = localStorage.getItem('token');
+      await axios.patch(`${API_URL}/api/pessoas/${id}`, { [campo]: valor }, {
+        headers: {
+          'Authorization': token
+        }
+      });
       fetchPessoas();
     } catch (error) {
       console.error('Erro ao atualizar status:', error);

@@ -162,15 +162,7 @@ const authMiddleware = (req, res, next) => {
 };
 
 // Proteger rotas administrativas
-app.post('/api/pessoas', (req, res, next) => {
-  // Se tem indicador_codigo, é indicação pública
-  if (req.body.indicador_codigo) {
-    next();
-  } else {
-    // Se não tem, é criação admin - precisa auth
-    authMiddleware(req, res, next);
-  }
-}, (req, res) => {
+app.post('/api/pessoas', (req, res) => {
   const { nome, telefone, endereco, indicador_codigo } = req.body;
   const codigo = gerarCodigo();
   
