@@ -43,22 +43,65 @@ app.get('/manifest.json', (req, res) => {
 });
 
 app.get('/sw.js', (req, res) => {
+  res.set({
+    'Cache-Control': 'no-cache, no-store, must-revalidate',
+    'Pragma': 'no-cache',
+    'Expires': '0'
+  });
   res.type('application/javascript');
-  res.send(`
-const CACHE_NAME = 'massas-ve-v1';
+  res.send(`const CACHE_NAME = 'massas-ve-v1752619045065';
 const urlsToCache = [
   '/',
   '/admin',
-  '/static/css/main.css',
-  '/static/js/main.js',
   '/manifest.json'
 ];
 
 self.addEventListener('install', event => {
+  self.skipWaiting(); // Força atualização imediata
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => cache.addAll(urlsToCache))
   );
+});
+
+self.addEventListener('activate', event => {
+  // Limpa caches antigos
+  event.waitUntil(
+    caches.keys().then(cacheNames => {
+      return Promise.all(
+        cacheNames.map(cacheName => {
+          if (cacheName !== CACHE_NAME) {
+            console.log('Removendo cache antigo:', cacheName);
+            return caches.delete(cacheName);
+          }
+        })
+      );
+    })
+  );
+  self.clients.claim(); // Assume controle imediato
+});
+
+self.addEventListener('fetch', event => {
+  // Estratégia: Network First (sempre tenta buscar da rede primeiro)
+  event.respondWith(
+    fetch(event.request)
+      .then(response => {
+        // Clona a resposta
+        const responseToCache = response.clone();
+        
+        caches.open(CACHE_NAME)
+          .then(cache => {
+            cache.put(event.request, responseToCache);
+          });
+        
+        return response;
+      })
+      .catch(() => {
+        // Se falhar, tenta do cache
+        return caches.match(event.request);
+      })
+  );
+});`);
 });
 
 self.addEventListener('fetch', event => {
@@ -334,4 +377,15 @@ app.get('*', (req, res) => {
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
   console.log(`\n🔐 Credenciais padrão:\n   Usuário: caetano\n   Senha: massas2025`);
+})
+// Middleware para prevenir cache nas rotas da API
+app.use('/api/*', (req, res, next) => {
+  res.set({
+    'Cache-Control': 'no-cache, no-store, must-revalidate',
+    'Pragma': 'no-cache',
+    'Expires': '0'
+  });
+  next();
 });
+
+;
