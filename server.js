@@ -17,38 +17,9 @@ app.use('/logo.png', express.static(path.join(__dirname, 'uploads/logo.png')));
 app.use('/uploads', express.static('uploads'));
 
 // Servir manifest e service worker
-app.get('/manifest.json', (req, res) => {
-  res.json({
-  "short_name": "Massas VE",
-  "name": "Massas Vó Esmeralda - Sistema de Indicações",
-  "icons": [
-    {
-      "src": "/icon-192.png",
-      "type": "image/png",
-      "sizes": "192x192"
-    },
-    {
-      "src": "/icon-512.png",
-      "type": "image/png",
-      "sizes": "512x512"
-    }
-  ],
-  "start_url": "/admin",
-  "background_color": "#8B5A3C",
-  "display": "standalone",
-  "scope": "/",
-  "theme_color": "#8B5A3C",
-  "description": "Sistema de indicações Massas Vó Esmeralda"
-});
 });
 
-app.get('/sw.js', (req, res) => {
-  res.set({
-    'Cache-Control': 'no-cache, no-store, must-revalidate',
-    'Pragma': 'no-cache',
-    'Expires': '0'
-  });
-  res.type('application/javascript');
+res.type('application/javascript');
   res.send(`const CACHE_NAME = 'massas-ve-v1752619045065';
 const urlsToCache = [
   '/',
