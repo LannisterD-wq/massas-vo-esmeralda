@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import API_URL from '../config';
 
 function Login({ onLogin }) {
   const [credentials, setCredentials] = useState({ username: '', password: '' });
@@ -8,7 +9,7 @@ function Login({ onLogin }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('/api/login', credentials);
+      const response = await axios.post(`${API_URL}/api/login`, credentials);
       if (response.data.success) {
         localStorage.setItem('token', response.data.token);
         onLogin(response.data.token);

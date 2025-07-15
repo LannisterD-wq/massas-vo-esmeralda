@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import API_URL from '../config';
 
 function IndicacaoForm() {
   const { codigo } = useParams();
@@ -15,7 +16,7 @@ function IndicacaoForm() {
 
   const fetchIndicador = async () => {
     try {
-      const response = await axios.get(`/api/pessoa/${codigo}`);
+      const response = await axios.get(`${API_URL}/api/pessoa/${codigo}`);
       setIndicador(response.data);
     } catch (error) {
       console.error('Erro ao buscar indicador:', error);
@@ -50,7 +51,7 @@ function IndicacaoForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('/api/pessoas', {
+      const response = await axios.post(`${API_URL}/api/pessoas`, {
         ...formData,
         indicador_codigo: codigo
       });

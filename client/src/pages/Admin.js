@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import API_URL from '../config';
 
 function Admin() {
   const [activeTab, setActiveTab] = useState('pessoas');
@@ -16,7 +17,7 @@ function Admin() {
 
   const fetchPessoas = async () => {
     try {
-      const response = await axios.get('/api/pessoas');
+      const response = await axios.get(`${API_URL}/api/pessoas`);
       setPessoas(response.data);
     } catch (error) {
       console.error('Erro ao buscar pessoas:', error);
@@ -63,7 +64,7 @@ function Admin() {
   const criarPessoa = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('/api/pessoas', novaPessoa);
+      const response = await axios.post(`${API_URL}/api/pessoas`, novaPessoa);
       alert(`Pessoa criada! Link: ${response.data.link}`);
       setNovaPessoa({ nome: '', telefone: '', endereco: '' });
       fetchPessoas();
@@ -89,7 +90,7 @@ function Admin() {
 
   const salvarEdicao = async (id) => {
     try {
-      await axios.put(`/api/pessoas/${id}`, dadosEdicao);
+      await axios.put(`${API_URL}/api/pessoas/${id}`, dadosEdicao);
       fetchPessoas();
       setEditando(null);
       setDadosEdicao({});
@@ -101,7 +102,7 @@ function Admin() {
 
   const atualizarStatus = async (id, campo, valor) => {
     try {
-      await axios.patch(`/api/pessoas/${id}`, { [campo]: valor });
+      await axios.patch(`${API_URL}/api/pessoas/${id}`, { [campo]: valor });
       fetchPessoas();
     } catch (error) {
       console.error('Erro ao atualizar status:', error);
