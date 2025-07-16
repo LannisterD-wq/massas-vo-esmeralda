@@ -1,4 +1,9 @@
-const express = require('express');
+const fs = require('fs');
+
+console.log('🚀 Criando server.js limpo e funcional...\n');
+
+// Server.js completo e testado
+const cleanServer = `const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
 const cors = require('cors');
 const path = require('path');
@@ -32,7 +37,7 @@ const db = new sqlite3.Database('./database.db');
 
 // Criar tabelas
 db.serialize(() => {
-  db.run(`
+  db.run(\`
     CREATE TABLE IF NOT EXISTS pessoas (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       nome TEXT NOT NULL,
@@ -46,21 +51,21 @@ db.serialize(() => {
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
       FOREIGN KEY (indicado_por) REFERENCES pessoas (id)
     )
-  `);
+  \`);
 
-  db.run(`
+  db.run(\`
     CREATE TABLE IF NOT EXISTS configuracoes (
       id INTEGER PRIMARY KEY,
       logo_path TEXT,
       admin_user TEXT DEFAULT 'caetano',
       admin_pass TEXT DEFAULT 'massas2025'
     )
-  `);
+  \`);
   
-  db.run(`
+  db.run(\`
     INSERT OR IGNORE INTO configuracoes (id, admin_user, admin_pass) 
     VALUES (1, 'caetano', 'massas2025')
-  `);
+  \`);
 });
 
 // Funções auxiliares
@@ -129,7 +134,7 @@ app.post('/api/pessoas', (req, res) => {
             res.json({ 
               id: this.lastID, 
               codigo,
-              link: `${process.env.BASE_URL || 'http://localhost:5000'}/indicacao/${codigo}`,
+              link: \`\${process.env.BASE_URL || 'http://localhost:5000'}/indicacao/\${codigo}\`,
               message: 'Cadastro realizado com sucesso!'
             });
           }
@@ -148,7 +153,7 @@ app.post('/api/pessoas', (req, res) => {
         res.json({ 
           id: this.lastID, 
           codigo,
-          link: `${process.env.BASE_URL || 'http://localhost:5000'}/indicacao/${codigo}`
+          link: \`\${process.env.BASE_URL || 'http://localhost:5000'}/indicacao/\${codigo}\`
         });
       }
     );
@@ -157,7 +162,7 @@ app.post('/api/pessoas', (req, res) => {
 
 // Listar pessoas
 app.get('/api/pessoas', authMiddleware, (req, res) => {
-  db.all(`
+  db.all(\`
     SELECT 
       p.*,
       i.nome as indicador_nome,
@@ -168,7 +173,7 @@ app.get('/api/pessoas', authMiddleware, (req, res) => {
     LEFT JOIN pessoas ind ON ind.indicado_por = p.id
     GROUP BY p.id
     ORDER BY p.created_at DESC
-  `, (err, rows) => {
+  \`, (err, rows) => {
     if (err) {
       res.status(400).json({ error: err.message });
       return;
@@ -236,7 +241,7 @@ app.patch('/api/pessoas/:id', authMiddleware, (req, res) => {
   values.push(req.params.id);
   
   db.run(
-    `UPDATE pessoas SET ${updates.join(', ')} WHERE id = ?`,
+    \`UPDATE pessoas SET \${updates.join(', ')} WHERE id = ?\`,
     values,
     (err) => {
       if (err) {
@@ -275,7 +280,24 @@ app.get('*', (req, res) => {
 
 // Iniciar servidor
 app.listen(PORT, () => {
-  console.log(`✅ Servidor rodando na porta ${PORT}`);
-  console.log(`📱 Acesse: ${process.env.BASE_URL || 'http://localhost:' + PORT}`);
-  console.log(`🔐 Login: caetano / massas2025`);
-});
+  console.log(\`✅ Servidor rodando na porta \${PORT}\`);
+  console.log(\`📱 Acesse: \${process.env.BASE_URL || 'http://localhost:' + PORT}\`);
+  console.log(\`🔐 Login: caetano / massas2025\`);
+});`;
+
+// Salvar
+fs.writeFileSync('server.js', cleanServer);
+console.log('✅ server.js criado com sucesso!');
+
+// Backup do antigo
+if (fs.existsSync('server.js.backup')) {
+  fs.unlinkSync('server.js.backup');
+}
+fs.renameSync('server.js', 'server.js.backup');
+fs.writeFileSync('server.js', cleanServer);
+
+console.log('\n🚀 Comandos finais:');
+console.log('git add .');
+console.log('git commit -m "Clean server.js - final fix"');
+console.log('git push');
+console.log('\n✨ Isso DEVE funcionar agora!');
