@@ -1,4 +1,94 @@
-import React, { useState, useEffect } from 'react';
+import React, { 
+
+
+        {activeTab === 'ranking' && (
+          <div className="card">
+            <h2>🏆 Ranking de Indicadores</h2>
+            {ranking.length === 0 ? (
+              <p style={{ textAlign: 'center', color: '#666', marginTop: '20px' }}>
+                Ainda não há indicações registradas.
+              </p>
+            ) : (
+              <div className="ranking-list">
+                {ranking.map((pessoa, index) => (
+                  <div key={pessoa.id} className="ranking-item">
+                    <div className="ranking-position">
+                      {index === 0 && '🥇'}
+                      {index === 1 && '🥈'}
+                      {index === 2 && '🥉'}
+                      {index > 2 && `${index + 1}º`}
+                    </div>
+                    <div className="ranking-info">
+                      <h3>{pessoa.nome}</h3>
+                      <p>📱 {formatarTelefone(pessoa.telefone)}</p>
+                    </div>
+                    <div className="ranking-stats">
+                      <div className="indicacoes-count">
+                        <span className="count-number">{pessoa.total_indicacoes}</span>
+                        <span className="count-label">indicações</span>
+                      </div>
+                    </div>
+                    <div className="ranking-actions">
+                      <button 
+                        className="copy-btn" 
+                        onClick={() => copiarLink(pessoa)}
+                      >
+                        {mensagemCopiado === pessoa.id ? '✓' : '📋'}
+                      </button>
+                      <button 
+                        className="btn btn-whatsapp" 
+                        onClick={() => compartilharWhatsApp(pessoa)}
+                        style={{ padding: '5px 10px', fontSize: '12px' }}
+                      >
+                        📱
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Sistema de Prêmios */}
+        {activeTab === 'ranking' && (
+          <div className="card premios-card">
+            <h2>🎁 Sistema de Prêmios - Campanha +1 Amigo</h2>
+            <div className="premios-info">
+              <p><strong>Como funciona:</strong></p>
+              <ul>
+                <li>Apresente 5 amigos que queiram experimentar nossos produtos</li>
+                <li>Não cobramos taxa de entrega</li>
+                <li>Combo especial: Canelone 500g + Molho Caseiro 350ml por R$ 29,90</li>
+                <li><strong>VANTAGEM: SÓ PAGA SE GOSTAR!</strong></li>
+              </ul>
+              
+              <div className="premio-destaque">
+                <h3>🏆 A cada 5 indicações que virarem vendas:</h3>
+                <div className="premio-lista">
+                  <div className="premio-item">
+                    <span className="premio-icon">☕</span>
+                    <span className="premio-desc">1 Caneca Personalizada Massas Vó Esmeralda</span>
+                  </div>
+                  <div className="premio-item">
+                    <span className="premio-icon">🍷</span>
+                    <span className="premio-desc">1 Litro de Vinho da Vó Esmeralda</span>
+                  </div>
+                  <div className="premio-item">
+                    <span className="premio-icon">🍝</span>
+                    <span className="premio-desc">1 Massa Grátis à sua escolha</span>
+                  </div>
+                </div>
+              </div>
+
+              <button onClick={() => window.open('/receitas', '_blank')} className="btn btn-receitas">
+                📖 Ver Modo de Preparo
+              </button>
+            </div>
+          </div>
+        )}
+
+useState, useEffect } from 'react';
 import axios from 'axios';
 import API_URL from '../config';
 
@@ -275,7 +365,6 @@ return (
 
         {/* Ranking */}
         {activeTab === 'ranking' && (
-          <>
           <div className="card">
             <h2>🏆 Ranking de Indicadores</h2>
             {ranking.length === 0 ? (
@@ -380,8 +469,7 @@ return (
                         {pessoa.indicador_nome && (
                           <p>👤 Indicado por: <span className="indicador-badge">{pessoa.indicador_nome}</span></p>
                         )}
-                      </>
-                    )}
+                      )}
                   </div>
                   <div className="pessoa-stats">
                     {pessoa.total_indicacoes > 0 && (
@@ -443,8 +531,7 @@ return (
                         Comprou
                       </label>
                     </div>
-                  </>
-                )}
+                  )}
               </div>
             ))}
           </div>
