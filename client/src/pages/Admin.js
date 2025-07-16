@@ -275,6 +275,7 @@ return (
 
         {/* Ranking */}
         {activeTab === 'ranking' && (
+          <>
           <div className="card">
             <h2>🏆 Ranking de Indicadores</h2>
             {ranking.length === 0 ? (

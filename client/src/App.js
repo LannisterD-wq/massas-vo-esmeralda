@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Admin from './pages/Admin';
 import IndicacaoForm from './pages/IndicacaoForm';
 import Login from './pages/Login';
+import Receitas from './pages/Receitas';
 import Debug from './pages/Debug';
 import './App.css';
 import axios from 'axios';
@@ -36,6 +37,15 @@ function App() {
   return (
     <Router>
       <div className="App">
+        
+      {/* Botão de Recarregar Global */}
+      <button 
+        onClick={() => window.location.reload()} 
+        className="reload-btn"
+        title="Recarregar página"
+      >
+        🔄
+      </button>
         <Routes>
           <Route path="/login" element={
             isAuthenticated ? <Navigate to="/admin" /> : <Login onLogin={handleLogin} />
@@ -46,6 +56,7 @@ function App() {
           <Route path="/" element={<Navigate to="/admin" />} />
           <Route path="/indicacao/:codigo" element={<IndicacaoForm />} />
           <Route path="/debug" element={<Debug />} />
+          <Route path="/receitas" element={<Receitas />} />
         </Routes>
       </div>
     </Router>

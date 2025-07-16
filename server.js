@@ -23,8 +23,18 @@ res.type('application/javascript');
   res.send(`
 const CACHE_NAME = 'massas-ve-v1';
 
+
+// Service Worker minimalista
 self.addEventListener('install', event => {
   self.skipWaiting();
+});
+
+self.addEventListener('activate', event => {
+  event.waitUntil(clients.claim());
+});
+
+self.addEventListener('fetch', event => {
+  event.respondWith(fetch(event.request));
 });
 
 self.addEventListener('activate', event => {
@@ -324,11 +334,18 @@ const urlsToCache = [
   '/login'
 ];
 
+
+// Service Worker minimalista
 self.addEventListener('install', event => {
-  event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(urlsToCache))
-  );
+  self.skipWaiting();
+});
+
+self.addEventListener('activate', event => {
+  event.waitUntil(clients.claim());
+});
+
+self.addEventListener('fetch', event => {
+  event.respondWith(fetch(event.request));
 });
 
 app.get('/manifest.json', (req, res) => {
