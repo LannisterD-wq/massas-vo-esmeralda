@@ -38,14 +38,7 @@ function App() {
     <Router>
       <div className="App">
         
-      {/* Botão de Recarregar Global */}
-      <button 
-        onClick={() => window.location.reload()} 
-        className="reload-btn"
-        title="Recarregar página"
-      >
-        🔄
-      </button>
+      
         <Routes>
           <Route path="/login" element={
             isAuthenticated ? <Navigate to="/admin" /> : <Login onLogin={handleLogin} />

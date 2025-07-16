@@ -712,22 +712,7 @@ body {
   }
 }
 /* Botão de Reload Global */
-.reload-btn {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background-color: var(--secondary-orange);
-  color: white;
-  border: none;
-  font-size: 20px;
-  cursor: pointer;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-  z-index: 1000;
-  transition: transform 0.2s;
-}
+
 
 .reload-btn:hover {
   transform: rotate(180deg);
@@ -877,7 +862,37 @@ body {
     font-size: 14px;
   }
   
-  .reload-btn {
-    bottom: 70px;
+  
+}
+/* Botão de Reload no Header */
+.reload-btn-header {
+  position: absolute;
+  top: 20px;
+  right: 80px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s;
+}
+
+.reload-btn-header:hover {
+  transform: rotate(180deg);
+  background-color: #45a049;
+}
+
+@media (max-width: 768px) {
+  .reload-btn-header {
+    right: 70px;
+    width: 35px;
+    height: 35px;
+    font-size: 16px;
   }
 }

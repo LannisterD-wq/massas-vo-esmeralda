@@ -179,11 +179,17 @@ function Admin() {
     .filter(p => p.total_indicacoes > 0)
     .sort((a, b) => b.total_indicacoes - a.total_indicacoes);
 
-  return (
+  
+  const handleReload = () => {
+    window.location.reload();
+  };
+
+return (
     <div>
       <div className="header">
         <img src="/logo.png" alt="Massas Vó Esmeralda" className="logo" />
         <h1>Massas Vó Esmeralda - Administração</h1>
+        <button onClick={handleReload} className="reload-btn-header">🔄</button>
         <button onClick={handleLogout} className="logout-btn">Sair</button>
       </div>
 
