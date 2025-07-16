@@ -1,4 +1,9 @@
-import React, { useState, useEffect } from 'react';
+const fs = require('fs');
+
+console.log('🔧 Recriando Admin.js sem erros de sintaxe...\n');
+
+// Admin.js completo e correto
+const adminCorreto = `import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import API_URL from '../config';
 
@@ -23,7 +28,7 @@ function Admin() {
   const fetchPessoas = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get(`${API_URL}/api/pessoas`, {
+      const response = await axios.get(\`\${API_URL}/api/pessoas\`, {
         headers: {
           'Authorization': token
         }
@@ -38,21 +43,21 @@ function Admin() {
   };
 
   const formatarTelefone = (telefone) => {
-    const numero = telefone.replace(/\D/g, '');
+    const numero = telefone.replace(/\\D/g, '');
     
     if (numero.length === 11) {
-      return `(${numero.slice(0, 2)}) ${numero.slice(2, 7)}-${numero.slice(7)}`;
+      return \`(\${numero.slice(0, 2)}) \${numero.slice(2, 7)}-\${numero.slice(7)}\`;
     } else if (numero.length === 10) {
-      return `(${numero.slice(0, 2)}) ${numero.slice(2, 6)}-${numero.slice(6)}`;
+      return \`(\${numero.slice(0, 2)}) \${numero.slice(2, 6)}-\${numero.slice(6)}\`;
     } else if (numero.length === 9) {
-      return `${numero.slice(0, 5)}-${numero.slice(5)}`;
+      return \`\${numero.slice(0, 5)}-\${numero.slice(5)}\`;
     }
     
     return telefone;
   };
 
   const limparTelefone = (telefone) => {
-    return telefone.replace(/\D/g, '');
+    return telefone.replace(/\\D/g, '');
   };
 
   const handleTelefoneChange = (e, isEdicao = false) => {
@@ -70,12 +75,12 @@ function Admin() {
     e.preventDefault();
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.post(`${API_URL}/api/pessoas`, novaPessoa, {
+      const response = await axios.post(\`\${API_URL}/api/pessoas\`, novaPessoa, {
         headers: {
           'Authorization': token
         }
       });
-      alert(`Pessoa criada! Link: ${response.data.link}`);
+      alert(\`Pessoa criada! Link: \${response.data.link}\`);
       setNovaPessoa({ nome: '', telefone: '', endereco: '' });
       fetchPessoas();
     } catch (error) {
@@ -101,7 +106,7 @@ function Admin() {
   const salvarEdicao = async (id) => {
     try {
       const token = localStorage.getItem('token');
-      await axios.put(`${API_URL}/api/pessoas/${id}`, dadosEdicao, {
+      await axios.put(\`\${API_URL}/api/pessoas/\${id}\`, dadosEdicao, {
         headers: {
           'Authorization': token
         }
@@ -118,7 +123,7 @@ function Admin() {
   const atualizarStatus = async (id, campo, valor) => {
     try {
       const token = localStorage.getItem('token');
-      await axios.patch(`${API_URL}/api/pessoas/${id}`, { [campo]: valor }, {
+      await axios.patch(\`\${API_URL}/api/pessoas/\${id}\`, { [campo]: valor }, {
         headers: {
           'Authorization': token
         }
@@ -130,31 +135,31 @@ function Admin() {
   };
 
   const copiarLink = (pessoa) => {
-    const link = `${window.location.origin}/indicacao/${pessoa.codigo}`;
+    const link = \`\${window.location.origin}/indicacao/\${pessoa.codigo}\`;
     navigator.clipboard.writeText(link);
     setMensagemCopiado(pessoa.id);
     setTimeout(() => setMensagemCopiado(''), 2000);
   };
 
   const compartilharWhatsApp = (pessoa) => {
-    const link = `${window.location.origin}/indicacao/${pessoa.codigo}`;
+    const link = \`\${window.location.origin}/indicacao/\${pessoa.codigo}\`;
     const telefoneNumero = limparTelefone(pessoa.telefone);
     const telefoneCompleto = telefoneNumero.startsWith('55') ? telefoneNumero : '55' + telefoneNumero;
     
-    const mensagem = "Olá " + pessoa.nome + "!\n\n" +
-      "Aqui está seu link exclusivo para indicar amigos e ganhar prêmios! 🎁\n\n" +
-      "👉 Seu link: " + link + "\n\n" +
-      "✨ Como funciona:\n" +
-      "• Compartilhe com amigos e familiares\n" +
-      "• Eles ganham uma prova grátis\n" +
-      "• Você acumula pontos para prêmios!\n\n" +
-      "📍 Massas Vó Esmeralda\n" +
-      "📞 WhatsApp: (11) 91510-9296\n" +
-      "📸 Instagram: @massasvoesmeralda\n" +
-      "📍 Rua Dentista Barreto, 863 - Vila Carrão\n\n" +
+    const mensagem = "Olá " + pessoa.nome + "!\\n\\n" +
+      "Aqui está seu link exclusivo para indicar amigos e ganhar prêmios! 🎁\\n\\n" +
+      "👉 Seu link: " + link + "\\n\\n" +
+      "✨ Como funciona:\\n" +
+      "• Compartilhe com amigos e familiares\\n" +
+      "• Eles ganham uma prova grátis\\n" +
+      "• Você acumula pontos para prêmios!\\n\\n" +
+      "📍 Massas Vó Esmeralda\\n" +
+      "📞 WhatsApp: (11) 91510-9296\\n" +
+      "📸 Instagram: @massasvoesmeralda\\n" +
+      "📍 Rua Dentista Barreto, 863 - Vila Carrão\\n\\n" +
       "Quanto mais indicações, mais prêmios você ganha! 🏆";
     
-    window.open(`https://wa.me/${telefoneCompleto}?text=${encodeURIComponent(mensagem)}`, '_blank');
+    window.open(\`https://wa.me/\${telefoneCompleto}?text=\${encodeURIComponent(mensagem)}\`, '_blank');
   };
 
   const handleLogout = () => {
@@ -209,19 +214,19 @@ function Admin() {
 
         <div className="tabs">
           <button 
-            className={`tab ${activeTab === 'pessoas' ? 'active' : ''}`}
+            className={\`tab \${activeTab === 'pessoas' ? 'active' : ''}\`}
             onClick={() => setActiveTab('pessoas')}
           >
             📋 Todas as Pessoas
           </button>
           <button 
-            className={`tab ${activeTab === 'ranking' ? 'active' : ''}`}
+            className={\`tab \${activeTab === 'ranking' ? 'active' : ''}\`}
             onClick={() => setActiveTab('ranking')}
           >
             🏆 Ranking
           </button>
           <button 
-            className={`tab ${activeTab === 'criar' ? 'active' : ''}`}
+            className={\`tab \${activeTab === 'criar' ? 'active' : ''}\`}
             onClick={() => setActiveTab('criar')}
           >
             ➕ Criar Indicador
@@ -282,7 +287,7 @@ function Admin() {
                         {index === 0 && '🥇'}
                         {index === 1 && '🥈'}
                         {index === 2 && '🥉'}
-                        {index > 2 && `${index + 1}º`}
+                        {index > 2 && \`\${index + 1}º\`}
                       </div>
                       <div className="ranking-info">
                         <h3>{pessoa.nome}</h3>
@@ -481,4 +486,14 @@ function Admin() {
   );
 }
 
-export default Admin;
+export default Admin;`;
+
+// Salvar o arquivo correto
+fs.writeFileSync('client/src/pages/Admin.js', adminCorreto);
+
+console.log('✅ Admin.js recriado sem erros de sintaxe!');
+console.log('\n🚀 Faça:');
+console.log('1. git add .');
+console.log('2. git commit -m "Fix Admin.js syntax error final"');
+console.log('3. git push');
+console.log('\n✨ Agora deve fazer o build sem erros!');
